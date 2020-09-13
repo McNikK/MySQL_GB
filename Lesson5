@@ -1,0 +1,95 @@
+use HM_ls5;
+
+#Практическое задание по теме «Операторы, фильтрация, сортировка и ограничение»
+#exercise1
+select * FROM exer_1; 
+CREATE table exer_1 (
+	created_at datetime,
+	updated_at datetime
+);
+
+INSERT into exer_1 values
+	(now(), now());
+	
+#exercise2
+SELECT * FROM exer_2;
+CREATE TABLE exer_2 (
+	created_at VARCHAR(50),
+	updated_at VARCHAR(50)
+);
+INSERT  into exer_2 values
+	('2019-01-20', '2020-01-20');
+
+alter table exer_2 modify column created_at datetime;
+alter table exer_2 modify column updated_at datetime;
+
+#exercise 3
+SELECT * FROM storehouses_products_ex_3;
+CREATE table storehouses_products_ex_3 (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	value INT UNSIGNED
+);
+
+INSERT INTO storehouses_products_ex_3 (value) VALUES 
+	(2500),
+	(1250),
+	(0),
+	(750),
+	(489),
+	(500),
+	(1750),
+	(252),
+	(30);
+
+INSERT INTO storehouses_products_ex_3 (value) VALUES 
+	(0),
+	(0);
+
+SELECT
+	value
+FROM 
+	storehouses_products_ex_3
+ORDER BY
+	value=0, value;
+
+#exercise 4 Из таблицы users необходимо извлечь пользователей, родившихся в августе и мае. 
+#Месяцы заданы в виде списка английских названий (may, august)
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) COMMENT 'Имя покупателя',
+  birthday_at DATE COMMENT 'Дата рождения'
+);
+
+INSERT INTO users (name, birthday_at) VALUES
+  ('Геннадий', '1990-10-05'),
+  ('Наталья', '1984-11-12'),
+  ('Александр', '1985-05-20'),
+  ('Сергей', '1988-02-14'),
+  ('Иван', '1998-01-12'),
+  ('Мария', '1992-08-29'),
+  ('Валдлен', '2001-06-26'),
+  ('Арина', '2002-07-28');
+ 
+SELECT birthday_at from users where month(birthday_at) BETWEEN 5 and 9;
+
+#Практическое задание теме «Агрегация данных»
+
+# exercise 1 Подсчитайте средний возраст пользователей в таблице users
+
+SELECT
+	floor(AVG((TO_DAYS(NOW())-TO_DAYS(birthday_at))/365.25)) as avr_age
+FROM 
+	users;
+
+# exercise 2 Подсчитайте средний возраст пользователей в таблице users
+
+
+SELECT
+	DAYNAME(birthday_at) as Day, 
+	count(DAYNAME(birthday_at)) as Qty
+FROM 
+	users
+GROUP BY
+	DAYNAME(birthday_at);
